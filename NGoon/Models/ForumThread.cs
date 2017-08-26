@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NGoon.Models
 {
-    class ForumThread
+    public class ForumThread
     {
     }
 }

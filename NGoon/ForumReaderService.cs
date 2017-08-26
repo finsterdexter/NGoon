@@ -8,6 +8,15 @@ namespace NGoon
 {
     public class ForumReaderService : IForumReaderService
     {
+        private readonly IForumHtmlFetcher _fetcher;
+        private readonly IForumHtmlParser _parser;
+
+        public ForumReaderService(IForumHtmlFetcher fetcher, IForumHtmlParser parser)
+        {
+            _fetcher = fetcher;
+            _parser = parser;
+        }
+
         public async Task<IEnumerable<Post>> GetNewPosts(int threadId)
         {
             throw new NotImplementedException();
