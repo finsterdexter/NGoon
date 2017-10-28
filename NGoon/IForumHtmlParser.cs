@@ -8,7 +8,7 @@ namespace NGoon
 {
     internal interface IForumHtmlParser
     {
-        Task<IEnumerable<Post>> ExtractPosts(string html);
+        Task<IEnumerable<Post>> ExtractPosts(int threadId, string html);
 
         Task<ForumThread> ExtractThread(string html);
 
