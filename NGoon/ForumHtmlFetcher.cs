@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,15 @@ namespace NGoon
 {
     internal class ForumHtmlFetcher : IForumHtmlFetcher
     {
+        private readonly string _username;
+        private readonly string _password;
+        private static readonly HttpClient client = new HttpClient();
+
+        public ForumHtmlFetcher(string username, string password)
+        {
+            _username = username;
+            _password = password;
+        }
 
         public Task<string> GetNewPostsHtml(int threadId)
         {
@@ -27,22 +37,57 @@ namespace NGoon
             return await GetHtml(uri);
         }
 
-        public Task<string> GetUser(int userId)
+        public async Task<string> GetUser(int userId)
         {
-            throw new NotImplementedException();
+            var uri = new Uri(Constants.BaseUri, string.Format(Constants.UserUrlFormat, userId));
+            return await GetHtml(uri);
         }
 
-        private async Task<string> GetHtml(Uri uri)
+        private async Task<string> GetHtml(Uri uri, bool recursed = false)
         {
-            // TODO: login
-
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
-            req.Method = "GET";
-            var response = await req.GetResponseAsync();
-            using (var respStream = response.GetResponseStream())
-            using (var reader = new StreamReader(respStream))
+            try
             {
-                return await reader.ReadToEndAsync();
+                var htmlString = await client.GetStringAsync(uri);
+                if (htmlString.Contains("CLICK HERE TO REGISTER YOUR ACCOUNT"))
+                {
+                    await ForumLogin(_username, _password);
+                    htmlString = await GetHtml(uri, true);
+                }
+                return htmlString;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task ForumLogin(string username, string password)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "action", "login"},
+                { "next", "/" },
+                { "username", username },
+                { "password", password }
+            };
+            var content = new FormUrlEncodedContent(values);
+
+            try
+            {
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.LoginActionUrl);
+                requestMessage.Content = content;
+                requestMessage.Headers.Referrer = new Uri("https://forums.somethingawful.com/account.php?action=loginform");
+
+                var response = await client.SendAsync(requestMessage);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException("Unsuccessful Login");
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

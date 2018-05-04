@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NGoon", "NGoon\NGoon.csproj", "{6CFDEC13-7CC9-41C9-9D79-C034E44A4BE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGoon.Tests", "NGoon.Tests\NGoon.Tests.csproj", "{8941E59C-2487-45AF-9DB7-C6F1D1566696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NGoon.Tests", "NGoon.Tests\NGoon.Tests.csproj", "{8941E59C-2487-45AF-9DB7-C6F1D1566696}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{295458C8-D897-4EB9-AE1B-F3BD36A1EFB2}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

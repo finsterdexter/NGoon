@@ -12,7 +12,7 @@ namespace NGoon.Tests
         public ForumReaderServiceIntegrationTests()
         {
             var services = new ServiceCollection();
-            services.AddForumReaderService();
+            services.AddForumReaderService(TestConstants.username, TestConstants.password);
             var provider = services.BuildServiceProvider();
             _forumReaderService = new ForumReaderService(provider);
         }
